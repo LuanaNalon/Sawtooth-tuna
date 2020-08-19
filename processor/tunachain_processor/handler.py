@@ -51,18 +51,20 @@ class TunachainTransactionHandler(TransactionHandler):
         payload = TunachainPayload(transaction.payload)
         state = TunachainState(context)
 
-        LOGGER.info('Handling transaction: %s > %s >%s> %s> %s:: %s',
+        LOGGER.info('Handling transaction: %s > %s > %s > %s > %s > %s:: %s',
                     payload.action,
                     payload.asset,
                     payload.weight,
                     payload.situation,
+                    payload.description,
                     '> ' + payload.owner[:8] + '... ' if payload.owner else '',
                     signer[:8] + '... ')
 
-        if payload.action == 'create':
+        if payload.action == 'create':#@luana
             _create_asset(asset=payload.asset,
-                          weight=payload.weight,#@luana peso,
+                          weight=payload.weight,
                           situation=payload.situation,
+                          description=payload.description,
                           owner=signer,
                           state=state)
 
@@ -87,12 +89,12 @@ class TunachainTransactionHandler(TransactionHandler):
                 payload.action))
 
 
-def _create_asset(asset, weight, situation, owner, state):
+def _create_asset(asset, weight, situation, description, owner, state):
     if state.get_asset(asset) is not None:
         raise InvalidTransaction(
             'Invalid action: Asset already exists: {}'.format(asset))
 
-    state.set_asset(asset, weight, situation, owner)
+    state.set_asset(asset, weight, situation, description, owner)
 
 
 def _transfer_asset(asset, owner, signer, state):

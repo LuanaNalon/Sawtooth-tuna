@@ -43,7 +43,8 @@ app.refresh = function () {
 
     // Populate asset views
     assets.forEach(asset => {
-      addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner)//@luana peso
+      addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
+      console.log(asset)
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
       }
@@ -61,10 +62,10 @@ app.refresh = function () {
   })
 }
 
-app.update = function (action, asset, weight, situation, owner) {//@luana peso
+app.update = function (action, asset, weight, situation, description, owner) {//@luana
   if (this.user) {
     submitUpdate(
-      { action, asset, weight, situation, owner },
+      { action, asset, weight, situation, description, owner},
       this.user.private,
       success => success ? this.refresh() : null
     )
@@ -88,10 +89,11 @@ $('[name="keySelect"]').on('change', function () {
 })
 
 // Create Asset
-$('#createSubmit').on('click', function () {
+$('#createSubmit').on('click', function () {//@luana 
   const asset = $('#createName').val()
-  const weight = $('#createWeight').val() //@luana peso
-  if (asset && weight) app.update('create', asset, weight, "ON_WAY")//@luana peso
+  const weight = $('#createWeight').val()
+  const description = $('#createDescription').val()
+  if (asset && weight && description) app.update('create', asset, weight, "ON_WAY", description)
 })
 
 // Transfer Asset

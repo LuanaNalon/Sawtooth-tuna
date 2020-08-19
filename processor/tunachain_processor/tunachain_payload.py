@@ -25,13 +25,14 @@ class TunachainPayload(object):
             data = json.loads(payload.decode('utf-8'))
         except ValueError:
             raise InvalidTransaction("Invalid payload serialization")
-
+#@luana
         action = data.get('action')
         asset = data.get('asset')
-        weight = data.get('weight')#@luana peso
+        weight = data.get('weight')
         situation = data.get('situation')
+        description = data.get('description')
         owner = data.get('owner')
-
+#
         if not action:
             raise InvalidTransaction('Action is required')
         if action not in ('create', 'transfer', 'accept', 'reject'):
@@ -44,13 +45,14 @@ class TunachainPayload(object):
             if not owner:
                 raise InvalidTransaction(
                     'Owner is required for "transfer" transaction')
-
+#luana
         self._action = action
         self._asset = asset
-        self._weight = weight#luana peso
+        self._weight = weight
         self._situation = situation
+        self._description = description
         self._owner = owner
-
+#@luana
     @property
     def action(self):
         return self._action
@@ -67,6 +69,10 @@ class TunachainPayload(object):
     def situation(self):
         return self._situation
 
+    @property
+    def description(self):
+        return self._description
+           
     @property
     def owner(self):
         return self._owner

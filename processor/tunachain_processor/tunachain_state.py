@@ -58,13 +58,14 @@ class TunachainState(object):
     def get_transfer(self, name):
         return self._get_state(_get_transfer_address(name))
 
-    def set_asset(self, name, weight, situation, owner):#@luana peso
+    def set_asset(self, name, weight, situation, description, owner):#@luana
         address = _get_asset_address(name)
         state_data = _serialize(
             {
                 "name": name,
                 "weight": weight,
                 "situation": situation,
+                "description": description,
                 "owner": owner
             })
         return self._context.set_state(
