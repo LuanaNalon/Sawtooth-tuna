@@ -35,7 +35,7 @@ class TunachainPayload(object):
 #
         if not action:
             raise InvalidTransaction('Action is required')
-        if action not in ('create', 'transfer', 'accept', 'reject'):
+        if action not in ('create', 'transfer', 'accept', 'reject', 'update'):#@luana add update
             raise InvalidTransaction('Invalid action: {}'.format(action))
 
         if not asset:
@@ -71,8 +71,7 @@ class TunachainPayload(object):
 
     @property
     def description(self):
-        return self._description
-           
+        return self._description     
     @property
     def owner(self):
         return self._owner

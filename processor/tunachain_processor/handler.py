@@ -60,12 +60,20 @@ class TunachainTransactionHandler(TransactionHandler):
                     '> ' + payload.owner[:8] + '... ' if payload.owner else '',
                     signer[:8] + '... ')
 
-        if payload.action == 'create':#@luana
+        if payload.action == 'create':#@luana add atributes
             _create_asset(asset=payload.asset,
                           weight=payload.weight,
                           situation=payload.situation,
                           description=payload.description,
                           owner=signer,
+                          state=state)
+
+        elif payload.action == 'update':#@luana
+            _update_asset(asset=payload.asset,
+                          weight=payload.weight,
+                          situation=payload.situation,
+                          description=payload.description,
+                          signer=signer,
                           state=state)
 
         elif payload.action == 'transfer':
@@ -89,12 +97,23 @@ class TunachainTransactionHandler(TransactionHandler):
                 payload.action))
 
 
-def _create_asset(asset, weight, situation, description, owner, state):
+def _create_asset(asset, weight, situation, description, owner, state):#@luana add atrib..
     if state.get_asset(asset) is not None:
         raise InvalidTransaction(
             'Invalid action: Asset already exists: {}'.format(asset))
 
     state.set_asset(asset, weight, situation, description, owner)
+
+def _update_asset(asset, weight, situation, description, signer, state):#@luana
+
+    asset_data = state.get_asset(asset)
+    if asset_data is None:
+        raise InvalidTransaction('Asset does not exist')
+
+    if signer != asset_data.get('owner'):
+        raise InvalidTransaction('Only an Asset\'s owner may update it')
+
+    state.set_asset(asset, weight, situation, description, signer)
 
 
 def _transfer_asset(asset, owner, signer, state):
@@ -117,7 +136,7 @@ def _accept_transfer(asset, signer, state):
         raise InvalidTransaction(
             'Transfers can only be accepted by the new owner')
 
-    state.set_asset(asset, transfer_data.get('owner'))
+    state.set_asset_transfer(asset, transfer_data.get('owner'))
     state.delete_transfer(asset)
 
 

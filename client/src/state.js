@@ -58,7 +58,10 @@ const saveKeys = keys => {
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
+      console.log('datum.data')
       console.log(atob(datum.data))
+      console.log('processed')
+      console.log(processed)
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
         if (datum.address[7] === '0') processed.assets.push(parsed)

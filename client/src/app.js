@@ -18,9 +18,9 @@ const {
 const {
   addOption,
   addRow,
-  addAction
+  addAction,
+  teste
 } = require('./components')
-
 const concatNewOwners = (existing, ownerContainers) => {
   return existing.concat(ownerContainers
     .filter(({ owner }) => !existing.includes(owner))
@@ -44,7 +44,6 @@ app.refresh = function () {
     // Populate asset views
     assets.forEach(asset => {
       addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
-      console.log(asset)
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
       }
@@ -62,7 +61,7 @@ app.refresh = function () {
   })
 }
 
-app.update = function (action, asset, weight, situation, description, owner) {//@luana
+app.update = function (action, asset, weight, situation, description, owner) {//@luana add atributes
   if (this.user) {
     submitUpdate(
       { action, asset, weight, situation, description, owner},
@@ -112,6 +111,31 @@ $('#transferList').on('click', '.accept', function () {
 $('#transferList').on('click', '.reject', function () {
   const asset = $(this).prev().prev().text()
   if (asset) app.update('reject', asset)
+})
+
+//update Asset @luana 
+$('#assetList').on('click', '.updateButton', function () {
+  var asset = $(this).data('asset');
+  var weight = $(this).data('weight');
+  var situation = $(this).data('situation');
+  var owner = $(this).data('owner');
+
+    var updateDialog = document.getElementById('updateDialog');
+    var cancelButton = document.getElementById('cancel');
+    var submitButton = document.getElementById('submit');
+
+    updateDialog.showModal();
+  
+    submitButton.addEventListener('click', function() {
+      const description = $('#updateDescription').val()
+       if (description) app.update('update', asset, weight, situation,  description, owner)
+       updateDialog.close();
+       });
+     
+       cancelButton.addEventListener('click', function() {
+         updateDialog.close();
+       });
+
 })
 
 // Initialize

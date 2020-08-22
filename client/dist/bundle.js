@@ -39214,9 +39214,9 @@ const {
 const {
   addOption,
   addRow,
-  addAction
+  addAction,
+  teste
 } = __webpack_require__(238)
-
 const concatNewOwners = (existing, ownerContainers) => {
   return existing.concat(ownerContainers
     .filter(({ owner }) => !existing.includes(owner))
@@ -39240,7 +39240,6 @@ app.refresh = function () {
     // Populate asset views
     assets.forEach(asset => {
       addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
-      console.log(asset)
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
       }
@@ -39258,7 +39257,7 @@ app.refresh = function () {
   })
 }
 
-app.update = function (action, asset, weight, situation, description, owner) {//@luana
+app.update = function (action, asset, weight, situation, description, owner) {//@luana add atributes
   if (this.user) {
     submitUpdate(
       { action, asset, weight, situation, description, owner},
@@ -39308,6 +39307,31 @@ $('#transferList').on('click', '.accept', function () {
 $('#transferList').on('click', '.reject', function () {
   const asset = $(this).prev().prev().text()
   if (asset) app.update('reject', asset)
+})
+
+//update Asset @luana 
+$('#assetList').on('click', '.updateButton', function () {
+  var asset = $(this).data('asset');
+  var weight = $(this).data('weight');
+  var situation = $(this).data('situation');
+  var owner = $(this).data('owner');
+
+    var updateDialog = document.getElementById('updateDialog');
+    var cancelButton = document.getElementById('cancel');
+    var submitButton = document.getElementById('submit');
+
+    updateDialog.showModal();
+  
+    submitButton.addEventListener('click', function() {
+      const description = $('#updateDescription').val()
+       if (description) app.update('update', asset, weight, situation,  description, owner)
+       updateDialog.close();
+       });
+     
+       cancelButton.addEventListener('click', function() {
+         updateDialog.close();
+       });
+
 })
 
 // Initialize
@@ -39381,7 +39405,10 @@ const saveKeys = keys => {
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
+      console.log('datum.data')
       console.log(atob(datum.data))
+      console.log('processed')
+      console.log(processed)
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
         if (datum.address[7] === '0') processed.assets.push(parsed)
@@ -51465,7 +51492,8 @@ const addOption = (parent, value, selected = false) => {
 // Add a new table row with any number of cells
 const addRow = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
-  $(parent).append(`<tr>${tds}</tr>`)
+ console.log(cells);
+  $(parent).append(`<tr>${tds} <td> <button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Update</button></td></tr>`)//@luana add btn
 }
 
 // Add div with accept/reject buttons

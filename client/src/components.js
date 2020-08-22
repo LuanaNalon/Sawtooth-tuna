@@ -18,7 +18,8 @@ const addOption = (parent, value, selected = false) => {
 // Add a new table row with any number of cells
 const addRow = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
-  $(parent).append(`<tr>${tds}</tr>`)
+ console.log(cells);
+  $(parent).append(`<tr>${tds} <td> <button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Update</button></td></tr>`)//@luana add btn
 }
 
 // Add div with accept/reject buttons

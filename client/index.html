@@ -101,13 +101,23 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
           <th>Weight</th>
           <th>State</th>
           <th>Holder</th>
-          <th>Description</th>          
+          <th>Description</th>   
+          <th>Action</th>   
         </tr>
-        <tbody id="assetList"></tbody>
+        <tbody id="assetList">
+        </tbody>
       </table>
     </div>
   </div>
 
+  <dialog id="updateDialog">
+  <label>Insert a new description</label>
+    <input id="updateDescription" class="form-control" type="text" placeholder="Enter a new asset description...">
+    <menu>
+    <button id="cancel">Cancel</button>
+    <button id="submit">Confirm</button>
+    </menu>
+  </dialog>
 <script src="dist/bundle.js"></script>
 </body>
 </html>
