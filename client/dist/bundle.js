@@ -39312,7 +39312,7 @@ $('#transferList').on('click', '.reject', function () {
   if (asset) app.update('reject', asset)
 })
 
-//update Asset @luana 
+//update description Asset @luana 
 $('#holderAssetList').on('click', '.updateButton', function () {
   var asset = $(this).data('asset');
   var weight = $(this).data('weight');
@@ -39334,6 +39334,17 @@ $('#holderAssetList').on('click', '.updateButton', function () {
        cancelButton.addEventListener('click', function() {
          updateDialog.close();
        });
+
+})
+
+//change state Asset @luana 
+$('#holderAssetList').on('click', '.changeStateButton', function () {
+  var asset = $(this).data('asset');
+  var weight = $(this).data('weight');
+  var description = $(this).data('description');
+  var owner = $(this).data('owner');
+  
+  app.update('update', asset, weight, "ON_PLACE", description, owner)
 
 })
 
@@ -51503,7 +51514,7 @@ const addRow = (parent, ...cells) => {
 const addRowHolder = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
  console.log(cells);
-  $(parent).append(`<tr>${tds} <td> <button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Update</button></td></tr>`)//@luana add btn
+  $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button><button class="changeStateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Change State</button></td></td></tr>`)//@luana add btn
 }
 
 // Add div with accept/reject buttons

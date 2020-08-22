@@ -116,7 +116,7 @@ $('#transferList').on('click', '.reject', function () {
   if (asset) app.update('reject', asset)
 })
 
-//update Asset @luana 
+//update description Asset @luana 
 $('#holderAssetList').on('click', '.updateButton', function () {
   var asset = $(this).data('asset');
   var weight = $(this).data('weight');
@@ -138,6 +138,17 @@ $('#holderAssetList').on('click', '.updateButton', function () {
        cancelButton.addEventListener('click', function() {
          updateDialog.close();
        });
+
+})
+
+//change state Asset @luana 
+$('#holderAssetList').on('click', '.changeStateButton', function () {
+  var asset = $(this).data('asset');
+  var weight = $(this).data('weight');
+  var description = $(this).data('description');
+  var owner = $(this).data('owner');
+  
+  app.update('update', asset, weight, "ON_PLACE", description, owner)
 
 })
 

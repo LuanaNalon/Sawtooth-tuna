@@ -26,7 +26,7 @@ const addRow = (parent, ...cells) => {
 const addRowHolder = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
  console.log(cells);
-  $(parent).append(`<tr>${tds} <td> <button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Update</button></td></tr>`)//@luana add btn
+  $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button><button class="changeStateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Change State</button></td></td></tr>`)//@luana add btn
 }
 
 // Add div with accept/reject buttons
