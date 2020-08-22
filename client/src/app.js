@@ -18,6 +18,7 @@ const {
 const {
   addOption,
   addRow,
+  addRowHolder,
   addAction,
   teste
 } = require('./components')
@@ -37,6 +38,7 @@ app.refresh = function () {
 
     // Clear existing data views
     $('#assetList').empty()
+    $('#holderAssetList').empty()//@luana
     $('#transferList').empty()
     $('[name="assetSelect"]').children().slice(1).remove()
     $('[name="transferSelect"]').children().slice(1).remove()
@@ -46,6 +48,7 @@ app.refresh = function () {
       addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
+        addRowHolder('#holderAssetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana        
       }
     })
 
@@ -114,7 +117,7 @@ $('#transferList').on('click', '.reject', function () {
 })
 
 //update Asset @luana 
-$('#assetList').on('click', '.updateButton', function () {
+$('#holderAssetList').on('click', '.updateButton', function () {
   var asset = $(this).data('asset');
   var weight = $(this).data('weight');
   var situation = $(this).data('situation');

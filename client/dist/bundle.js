@@ -39214,6 +39214,7 @@ const {
 const {
   addOption,
   addRow,
+  addRowHolder,
   addAction,
   teste
 } = __webpack_require__(238)
@@ -39233,6 +39234,7 @@ app.refresh = function () {
 
     // Clear existing data views
     $('#assetList').empty()
+    $('#holderAssetList').empty()//@luana
     $('#transferList').empty()
     $('[name="assetSelect"]').children().slice(1).remove()
     $('[name="transferSelect"]').children().slice(1).remove()
@@ -39242,6 +39244,7 @@ app.refresh = function () {
       addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
+        addRowHolder('#holderAssetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana        
       }
     })
 
@@ -39310,7 +39313,7 @@ $('#transferList').on('click', '.reject', function () {
 })
 
 //update Asset @luana 
-$('#assetList').on('click', '.updateButton', function () {
+$('#holderAssetList').on('click', '.updateButton', function () {
   var asset = $(this).data('asset');
   var weight = $(this).data('weight');
   var situation = $(this).data('situation');
@@ -51493,6 +51496,13 @@ const addOption = (parent, value, selected = false) => {
 const addRow = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
  console.log(cells);
+  $(parent).append(`<tr>${tds}</tr>`)
+}
+
+//@luana
+const addRowHolder = (parent, ...cells) => {
+  const tds = cells.map(cell => `<td>${cell}</td>`).join('')
+ console.log(cells);
   $(parent).append(`<tr>${tds} <td> <button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Update</button></td></tr>`)//@luana add btn
 }
 
@@ -51508,6 +51518,7 @@ const addAction = (parent, label, action) => {
 module.exports = {
   addOption,
   addRow,
+  addRowHolder,
   addAction
 }
 

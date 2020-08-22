@@ -19,6 +19,13 @@ const addOption = (parent, value, selected = false) => {
 const addRow = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
  console.log(cells);
+  $(parent).append(`<tr>${tds}</tr>`)
+}
+
+//@luana
+const addRowHolder = (parent, ...cells) => {
+  const tds = cells.map(cell => `<td>${cell}</td>`).join('')
+ console.log(cells);
   $(parent).append(`<tr>${tds} <td> <button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Update</button></td></tr>`)//@luana add btn
 }
 
@@ -34,5 +41,6 @@ const addAction = (parent, label, action) => {
 module.exports = {
   addOption,
   addRow,
+  addRowHolder,
   addAction
 }
