@@ -39200,7 +39200,7 @@ module.exports = {"COMPRESSED_TYPE_INVALID":"compressed should be a boolean","EC
 This code was written by Zac Delventhal @delventhalz. 
 Original source code can be found here: https://github.com/delventhalz/transfer-chain-js/blob/master/client/src/app.js
  */
- 
+
 
 
 const $ = __webpack_require__(36)
@@ -39244,7 +39244,7 @@ app.refresh = function () {
       addRow('#assetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
       if (this.user && asset.owner === this.user.public) {
         addOption('[name="assetSelect"]', asset.name)
-        addRowHolder('#holderAssetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana        
+        addRowHolder('#holderAssetList', asset.name, asset.weight, asset.situation, asset.owner, asset.description)//@luana
       }
     })
 
@@ -39263,7 +39263,7 @@ app.refresh = function () {
 app.update = function (action, asset, weight, situation, description, owner) {//@luana add atributes
   if (this.user) {
     submitUpdate(
-      { action, asset, weight, situation, description, owner},
+      { action, asset, weight, situation, description, owner },
       this.user.private,
       success => success ? this.refresh() : null
     )
@@ -39294,17 +39294,39 @@ $('#createSubmit').on('click', function () {//@luana
   if (asset && weight && description) app.update('create', asset, weight, "ON_WAY", description)
 })
 
-// Transfer Asset
+// Transfer Asset @luana alter
 $('#transferSubmit').on('click', function () {
   const asset = $('[name="assetSelect"]').val()
   const owner = $('[name="transferSelect"]').val()
-  if (asset && owner) app.update('transfer', asset, owner)
+  var tuna = null
+
+  getState(({ assets, transfers }) => {
+    this.assets = assets
+
+    assets.forEach(asset_ => {
+      if (asset_.name === asset) {
+        tuna = asset_
+      }
+    })
+    if (asset && owner) app.update('transfer', asset, tuna.weight, tuna.situation, tuna.description, owner)
+    
+  })
 })
 
-// Accept Asset
+// Accept Asset @luana alter
 $('#transferList').on('click', '.accept', function () {
   const asset = $(this).prev().text()
-  if (asset) app.update('accept', asset)
+  var tuna = null
+  getState(({ assets, transfers }) => {
+    this.assets = assets
+
+    assets.forEach(asset_ => {
+      if (asset_.name === asset) {
+        tuna = asset_
+      }
+    })
+    if (asset) app.update('accept', asset, tuna.weight, tuna.situation, tuna.description, tuna.owner)
+  })
 })
 
 $('#transferList').on('click', '.reject', function () {
@@ -39319,21 +39341,21 @@ $('#holderAssetList').on('click', '.updateButton', function () {
   var situation = $(this).data('situation');
   var owner = $(this).data('owner');
 
-    var updateDialog = document.getElementById('updateDialog');
-    var cancelButton = document.getElementById('cancel');
-    var submitButton = document.getElementById('submit');
+  var updateDialog = document.getElementById('updateDialog');
+  var cancelButton = document.getElementById('cancel');
+  var submitButton = document.getElementById('submit');
 
-    updateDialog.showModal();
-  
-    submitButton.addEventListener('click', function() {
-      const description = $('#updateDescription').val()
-       if (description) app.update('update', asset, weight, situation,  description, owner)
-       updateDialog.close();
-       });
-     
-       cancelButton.addEventListener('click', function() {
-         updateDialog.close();
-       });
+  updateDialog.showModal();
+
+  submitButton.addEventListener('click', function () {
+    const description = $('#updateDescription').val()
+    if (description) app.update('update', asset, weight, situation, description, owner)
+    updateDialog.close();
+  });
+
+  cancelButton.addEventListener('click', function () {
+    updateDialog.close();
+  });
 
 })
 
@@ -39343,9 +39365,36 @@ $('#holderAssetList').on('click', '.changeStateButton', function () {
   var weight = $(this).data('weight');
   var description = $(this).data('description');
   var owner = $(this).data('owner');
-  
+
   app.update('update', asset, weight, "ON_PLACE", description, owner)
 
+})
+
+//@luana filter state
+$('#on_way').on('click', function () {//@luana 
+  var rows = $("#assetList").find("tr").hide();
+    rows.filter(":contains('ON_WAY')").show();
+})
+//@luana filter state
+$('#on_place').on('click', function () {//@luana 
+  var rows = $("#assetList").find("tr").hide();
+    rows.filter(":contains('ON_PLACE')").show();
+})
+//@luana filter state
+$('#on_way_holder').on('click', function () {//@luana 
+  var rows = $("#holderAssetList").find("tr").hide();
+    rows.filter(":contains('ON_WAY')").show();
+})
+//@luana filter state
+$('#on_place_holder').on('click', function () {//@luana 
+  var rows = $("#holderAssetList").find("tr").hide();
+    rows.filter(":contains('ON_PLACE')").show();
+})
+$('#all').on('click', function () {//@luana 
+  app.refresh()
+})
+$('#all_holder').on('click', function () {//@luana 
+  app.refresh()
 })
 
 // Initialize
@@ -39369,7 +39418,7 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
 
 
 const $ = __webpack_require__(36)
-const {createHash} = __webpack_require__(64)
+const { createHash } = __webpack_require__(64)
 const protobuf = __webpack_require__(211)
 const {
   createContext,
@@ -39419,17 +39468,13 @@ const saveKeys = keys => {
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
-      console.log('datum.data')
-      console.log(atob(datum.data))
-      console.log('processed')
-      console.log(processed)
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
         if (datum.address[7] === '0') processed.assets.push(parsed)
         if (datum.address[7] === '1') processed.transfers.push(parsed)
       }
       return processed
-    }, {assets: [], transfers: []}))
+    }, { assets: [], transfers: [] }))
   })
 }
 
@@ -39486,9 +39531,9 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
   $.post({
     url: `${API_URL}/batches`,
     data: batchListBytes,
-    headers: {'Content-Type': 'application/octet-stream'},
+    headers: { 'Content-Type': 'application/octet-stream' },
     processData: false,
-    success: function( resp ) {
+    success: function (resp) {
       var id = resp.link.split('?')[1]
       $.get(`${API_URL}/batch_statuses?${id}&wait`, ({ data }) => cb(true))
     },
@@ -51506,15 +51551,17 @@ const addOption = (parent, value, selected = false) => {
 // Add a new table row with any number of cells
 const addRow = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
- console.log(cells);
   $(parent).append(`<tr>${tds}</tr>`)
 }
 
 //@luana
 const addRowHolder = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
- console.log(cells);
-  $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button><button class="changeStateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]}>Change State</button></td></td></tr>`)//@luana add btn
+  if (cells[2] === "ON_PLACE") {
+    $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button></td></tr>`)//@luana add btn
+  } else {
+    $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button><button class="changeStateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Change State</button></td></td></tr>`)//@luana add btn
+  }
 }
 
 // Add div with accept/reject buttons

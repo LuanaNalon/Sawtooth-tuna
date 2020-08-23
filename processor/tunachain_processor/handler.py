@@ -84,6 +84,9 @@ class TunachainTransactionHandler(TransactionHandler):
 
         elif payload.action == 'accept':
             _accept_transfer(asset=payload.asset,
+                             weight=payload.weight,
+                             situation=payload.situation,
+                             description=payload.description,
                              signer=signer,
                              state=state)
 
@@ -127,7 +130,7 @@ def _transfer_asset(asset, owner, signer, state):
     state.set_transfer(asset, owner)
 
 
-def _accept_transfer(asset, signer, state):
+def _accept_transfer(asset, weight, situation, description, signer, state):
     transfer_data = state.get_transfer(asset)
     if transfer_data is None:
         raise InvalidTransaction('Asset is not being transfered')
@@ -136,7 +139,7 @@ def _accept_transfer(asset, signer, state):
         raise InvalidTransaction(
             'Transfers can only be accepted by the new owner')
 
-    state.set_asset_transfer(asset, transfer_data.get('owner'))
+    state.set_asset(asset, weight, situation, description, transfer_data.get('owner'))#@luana
     state.delete_transfer(asset)
 
 

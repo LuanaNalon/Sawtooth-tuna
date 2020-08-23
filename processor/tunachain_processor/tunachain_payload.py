@@ -71,7 +71,8 @@ class TunachainPayload(object):
 
     @property
     def description(self):
-        return self._description     
+        return self._description
+             
     @property
     def owner(self):
         return self._owner

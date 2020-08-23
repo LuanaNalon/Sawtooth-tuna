@@ -8,7 +8,7 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
 'use strict'
 
 const $ = require('jquery')
-const {createHash} = require('crypto')
+const { createHash } = require('crypto')
 const protobuf = require('sawtooth-sdk/protobuf')
 const {
   createContext,
@@ -58,17 +58,13 @@ const saveKeys = keys => {
 const getState = cb => {
   $.get(`${API_URL}/state?address=${PREFIX}`, ({ data }) => {
     cb(data.reduce((processed, datum) => {
-      console.log('datum.data')
-      console.log(atob(datum.data))
-      console.log('processed')
-      console.log(processed)
       if (datum.data !== '') {
         const parsed = JSON.parse(atob(datum.data))
         if (datum.address[7] === '0') processed.assets.push(parsed)
         if (datum.address[7] === '1') processed.transfers.push(parsed)
       }
       return processed
-    }, {assets: [], transfers: []}))
+    }, { assets: [], transfers: [] }))
   })
 }
 
@@ -125,9 +121,9 @@ const submitUpdate = (payload, privateKeyHex, cb) => {
   $.post({
     url: `${API_URL}/batches`,
     data: batchListBytes,
-    headers: {'Content-Type': 'application/octet-stream'},
+    headers: { 'Content-Type': 'application/octet-stream' },
     processData: false,
-    success: function( resp ) {
+    success: function (resp) {
       var id = resp.link.split('?')[1]
       $.get(`${API_URL}/batch_statuses?${id}&wait`, ({ data }) => cb(true))
     },

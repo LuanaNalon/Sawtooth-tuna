@@ -5,6 +5,7 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
 
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Sawtooth Tuna Chain</title>
   <link rel="icon" href="favicon.png" type="image/gif">
@@ -13,37 +14,45 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+
   <!-- adding style here -->
   <style type="text/css">
-    header{
+    header {
       background-color: lightgray;
-      font-size:20px;
-      padding:15px;
+      font-size: 20px;
+      padding: 15px;
     }
-    header, .form-group{
+
+    header,
+    .form-group {
       margin-bottom: 3%;
     }
-    #body{
-      margin-left:3%;
+
+    #body {
+      margin-left: 3%;
     }
-    .form-control{
+
+    .form-control {
       margin: 8px;
     }
-    #right_header{
-      width:20%;
-      font-size:15px;
-      margin-right:0px;
+
+    #right_header {
+      width: 20%;
+      font-size: 15px;
+      margin-right: 0px;
     }
-    #left_header{
-      margin-left:0;
-      width:45%;
-      display:inline-block;
+
+    #left_header {
+      margin-left: 0;
+      width: 45%;
+      display: inline-block;
     }
-    #left-column{
-      display:inline-block;
+
+    #left-column {
+      display: inline-block;
     }
-    #data{
+
+    #data {
       display: inline-block;
       width: 45%;
       vertical-align: top;
@@ -51,8 +60,9 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
     }
   </style>
 </head>
+
 <body>
-  
+
   <header>
     <div id="left_header">Sawtooth Tuna Chain</div>
     <i id="right_header">Example Blockchain Application for Introduction to Hyperledger Sawtooth LFS171x</i>
@@ -95,30 +105,40 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
 
     <div id="data">
       <label>Tuna List</label>
+      <br></br>
+      <button id="on_way" class="btn btn-primary">ON WAY</button>
+      <button id="on_place" class="btn btn-primary">ON PLACE</button>
+      <button id="all" class="btn btn-primary">ALL</button>
+      <br></br>
       <table class="table table-hover">
         <tr>
           <th>Tuna</th>
           <th>Weight</th>
           <th>State</th>
           <th>Holder</th>
-          <th>Description</th>   
+          <th>Description</th>
         </tr>
         <tbody id="assetList">
         </tbody>
       </table>
     </div>
-    
+
     <div id="data-owner">
 
       <label>My Tuna List</label>
+      <br></br>
       <table class="table table-hover">
+        <button id="on_way_holder" class="btn btn-primary">ON WAY</button>
+        <button id="on_place_holder" class="btn btn-primary">ON PLACE</button>
+        <button id="all_holder" class="btn btn-primary">ALL</button>
+        <br></br>
         <tr>
           <th>Tuna</th>
           <th>Weight</th>
           <th>State</th>
           <th>Holder</th>
-          <th>Description</th>   
-          <th>Action</th>   
+          <th>Description</th>
+          <th>Action</th>
         </tr>
         <tbody id="holderAssetList">
         </tbody>
@@ -127,13 +147,14 @@ Original source code can be found here: https://github.com/delventhalz/transfer-
   </div>
 
   <dialog id="updateDialog">
-  <label>Insert a new description</label>
+    <label>Insert a new description</label>
     <input id="updateDescription" class="form-control" type="text" placeholder="Enter a new asset description...">
     <menu>
-    <button id="cancel">Cancel</button>
-    <button id="submit">Confirm</button>
+      <button id="cancel" class="btn btn-primary">Cancel</button>
+      <button id="submit" class="btn btn-primary">Confirm</button>
     </menu>
   </dialog>
-<script src="dist/bundle.js"></script>
+  <script src="dist/bundle.js"></script>
 </body>
+
 </html>
