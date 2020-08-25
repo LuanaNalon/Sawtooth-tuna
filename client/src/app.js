@@ -91,39 +91,38 @@ $('[name="keySelect"]').on('change', function () {
 })
 
 // Create Asset
-$('#createSubmit').on('click', function () {//@luana 
+$('#createSubmit').on('click', function () {
   const asset = $('#createName').val()
   const weight = $('#createWeight').val()
   const description = $('#createDescription').val()
-  if (asset && weight && description) app.update('create', asset, weight, "ON_WAY", description)
+  if (asset && weight && description) app.update('create', asset, weight, "ON_WAY", description)//@luana 
 })
 
 // Transfer Asset @luana alter
 $('#transferSubmit').on('click', function () {
   const asset = $('[name="assetSelect"]').val()
   const owner = $('[name="transferSelect"]').val()
+ //@luana 
   var tuna = null
-
   getState(({ assets, transfers }) => {
     this.assets = assets
-
     assets.forEach(asset_ => {
       if (asset_.name === asset) {
         tuna = asset_
       }
     })
     if (asset && owner) app.update('transfer', asset, tuna.weight, tuna.situation, tuna.description, owner)
-    
+  //#
   })
 })
 
 // Accept Asset @luana alter
 $('#transferList').on('click', '.accept', function () {
   const asset = $(this).prev().text()
+  //@luana 
   var tuna = null
   getState(({ assets, transfers }) => {
     this.assets = assets
-
     assets.forEach(asset_ => {
       if (asset_.name === asset) {
         tuna = asset_

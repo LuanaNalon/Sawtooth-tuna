@@ -39287,39 +39287,38 @@ $('[name="keySelect"]').on('change', function () {
 })
 
 // Create Asset
-$('#createSubmit').on('click', function () {//@luana 
+$('#createSubmit').on('click', function () {
   const asset = $('#createName').val()
   const weight = $('#createWeight').val()
   const description = $('#createDescription').val()
-  if (asset && weight && description) app.update('create', asset, weight, "ON_WAY", description)
+  if (asset && weight && description) app.update('create', asset, weight, "ON_WAY", description)//@luana 
 })
 
 // Transfer Asset @luana alter
 $('#transferSubmit').on('click', function () {
   const asset = $('[name="assetSelect"]').val()
   const owner = $('[name="transferSelect"]').val()
+ //@luana 
   var tuna = null
-
   getState(({ assets, transfers }) => {
     this.assets = assets
-
     assets.forEach(asset_ => {
       if (asset_.name === asset) {
         tuna = asset_
       }
     })
     if (asset && owner) app.update('transfer', asset, tuna.weight, tuna.situation, tuna.description, owner)
-    
+  //#
   })
 })
 
 // Accept Asset @luana alter
 $('#transferList').on('click', '.accept', function () {
   const asset = $(this).prev().text()
+  //@luana 
   var tuna = null
   getState(({ assets, transfers }) => {
     this.assets = assets
-
     assets.forEach(asset_ => {
       if (asset_.name === asset) {
         tuna = asset_
@@ -51558,9 +51557,9 @@ const addRow = (parent, ...cells) => {
 const addRowHolder = (parent, ...cells) => {
   const tds = cells.map(cell => `<td>${cell}</td>`).join('')
   if (cells[2] === "ON_PLACE") {
-    $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button></td></tr>`)//@luana add btn
+    $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button></td></tr>`)
   } else {
-    $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button><button class="changeStateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Change State</button></td></td></tr>`)//@luana add btn
+    $(parent).append(`<tr>${tds} <td><button class="updateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Update</button><button class="changeStateButton" data-asset=${cells[0]} data-weight=${cells[1]} data-situation=${cells[2]} data-owner=${cells[3]} data-description=${cells[4]}>Change State</button></td></td></tr>`)
   }
 }
 
